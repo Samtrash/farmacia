@@ -57,16 +57,51 @@ function filtrarDecimal(input) {
 }
 
 /* ─── CUSTOM PROMPT ─── */
-function customPrompt(title, label, initialValue, callback) {
+function customPrompt(title, label, initialValue, callback, type = 'text') {
   document.getElementById('promptTitle').innerText = title;
   document.getElementById('promptLabel').innerText = label;
   const input = document.getElementById('promptInput');
+  
+  // Limpiar listeners previos y eventos
+  input.onkeypress = null;
+  input.oninput = null;
+  input.onkeydown = null;
+  
+  if (type === 'number') {
+    input.type = 'text'; // Usamos text + inputmode numeric para evitar spinners nativos de type="number"
+    input.inputMode = 'numeric';
+    input.pattern = '[0-9]*';
+    input.onkeypress = soloNumeros;
+    input.oninput = function() {
+      this.value = this.value.replace(/[^0-9]/g, '');
+    };
+  } else if (type === 'decimal') {
+    input.type = 'text';
+    input.inputMode = 'decimal';
+    input.onkeypress = soloDecimal;
+    input.oninput = function() {
+      filtrarDecimal(this);
+    };
+  } else {
+    input.type = 'text';
+    input.inputMode = 'text';
+    input.removeAttribute('pattern');
+  }
+  
   input.value = initialValue;
   
   const btnOk = document.getElementById('btnPromptOk');
   btnOk.onclick = function() {
     closeModal('modalPrompt');
     callback(input.value);
+  };
+  
+  // Aceptar con la tecla Enter
+  input.onkeydown = function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      btnOk.click();
+    }
   };
   
   openModal('modalPrompt');

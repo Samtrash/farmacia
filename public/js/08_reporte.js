@@ -73,8 +73,8 @@ function renderReporte(data) {
     });
 
     // Subtotal del día
-    html += '<tr style="background:#f1f5f9">' +
-      '<td colspan="6" style="padding:10px 14px;">' +
+    html += '<tr style="background:#e2e8f0">' +
+      '<td colspan="6" style="padding:12px 14px; border-top: 1.5px solid #cbd5e1; border-bottom: 4px solid #94a3b8;">' +
         '<div style="display:flex; flex-wrap:wrap; align-items:center; gap:6px 16px; line-height:1.7; font-size:12px;">' +
           '<span>📅 <strong>' + fecha + '</strong></span>' +
           '<span>Ventas: <strong style="color:#0e7490">S/ ' + Number(resumen.totalDia).toFixed(2) + '</strong></span>' +
@@ -160,7 +160,7 @@ function editarCajaInicial(fecha, actual) {
         showSnack(d.msg, d.error === 0 ? 'success' : 'error');
         if (d.error === 0) buscarReporte();
       });
-  });
+  }, 'decimal');
 }
 
 function modalDevolver(ventaId, prodId, detalle, precio, maxCant) {
@@ -191,5 +191,5 @@ function modalDevolver(ventaId, prodId, detalle, precio, maxCant) {
           }
         });
     });
-  });
+  }, 'number');
 }

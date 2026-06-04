@@ -5,11 +5,11 @@
   <!-- CATÁLOGO (izquierda) -->
   <div class="pos-catalog">
     <div class="search-section">
-      <div class="search-bar" style="flex:0 0 200px">
+      <div class="search-bar search-bar-code">
         <span class="material-symbols-outlined">qr_code_scanner</span>
         <input type="text" id="inputCodigo" placeholder="Escanear código..." onkeyup="buscarCodigo()" maxlength="30">
       </div>
-      <div class="search-bar" style="flex:1">
+      <div class="search-bar search-bar-name">
         <span class="material-symbols-outlined">search</span>
         <input type="text" id="inputNombre" placeholder="Buscar por nombre..." onkeyup="buscarNombre()">
       </div>

@@ -51,8 +51,8 @@ function renderTabla(lista) {
         '<div class="row-content" id="details-' + p.id + '">' +
           '<div style="padding: 12px 16px; font-size:12px;">' +
             '<div><strong>Código:</strong> ' + (p.codigo || '-') + '</div>' +
-            '<div style="margin-top:4px"><strong>P. Compra:</strong> S/ ' + Number(p.pcompra).toFixed(2) + 
-            ' &nbsp;|&nbsp; <strong>P. Promo:</strong> ' + (p.ppromo ? 'S/ '+Number(p.ppromo).toFixed(2) : '-') + '</div>' +
+            '<div style="margin-top:4px"><strong>P. Compra:</strong> S/ ' + Number(p.pcompra).toFixed(2) + '</div>' +
+            '<div style="margin-top:4px"><strong>P. Promo:</strong> ' + (p.ppromo ? 'S/ '+Number(p.ppromo).toFixed(2) : '-') + '</div>' +
             (EXP ? '<div style="margin-top:4px"><strong>Vence:</strong> ' + (p.expmes || '-') + '/' + (p.expanio || '-') + '</div>' : '') +
             '<div style="margin-top:12px; display:flex; gap:8px;">' +
               '<button class="btn btn-sm btn-primary" onclick="modalEditar(' + p.id + ')"><span class="material-symbols-outlined" style="font-size:16px">edit</span> Editar</button>' +
@@ -196,31 +196,129 @@ function imprimirReporteProductos() {
   }, 500);
 }
 
-function descargarExcelProductos() {
+async function descargarExcelProductos() {
   if (todosProductos.length === 0) {
     showSnack('No hay productos para descargar', 'error');
     return;
   }
   
   const EXP = document.getElementById('tieneExp').value === '1';
-  let csv = 'Codigo,Descripcion,P.Compra,P.Venta,Stock' + (EXP ? ',Vencimiento' : '') + '\n';
   
-  todosProductos.forEach(p => {
-    const cod = p.codigo || '';
-    const det = '"' + p.detalle.replace(/"/g, '""') + '"'; // Escapar comillas dobles
-    const venc = EXP ? (p.expmes ? `${p.expmes}/${p.expanio}` : '') : '';
-    
-    csv += `${cod},${det},${p.pcompra},${p.pventa},${p.stock}`;
-    if (EXP) csv += `,${venc}`;
-    csv += '\n';
+  // 1. Crear el libro y la hoja
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet('Inventario');
+  
+  // 2. Título principal
+  const titleRow = worksheet.addRow(["Reporte de Inventario de Productos"]);
+  titleRow.getCell(1).font = { name: 'Arial', size: 16, bold: true, color: { argb: '0E7490' } };
+  
+  const dateRow = worksheet.addRow(["Generado el: " + new Date().toLocaleString()]);
+  dateRow.getCell(1).font = { name: 'Arial', size: 10, italic: true, color: { argb: '64748B' } };
+  
+  worksheet.addRow([]); // Fila vacía
+  
+  // 3. Configurar columnas y encabezados
+  const columns = [
+    { header: '#', key: 'idx', width: 6 },
+    { header: 'Código', key: 'codigo', width: 18 },
+    { header: 'Descripción', key: 'detalle', width: 38 },
+    { header: 'P. Compra', key: 'pcompra', width: 12 },
+    { header: 'P. Venta', key: 'pventa', width: 12 },
+    { header: 'P. Promoción', key: 'ppromo', width: 12 },
+    { header: 'Stock', key: 'stock', width: 10 }
+  ];
+  if (EXP) {
+    columns.push({ header: 'Vencimiento', key: 'vencimiento', width: 14 });
+  }
+  
+  // Agregar fila de cabecera
+  const headerRowData = columns.map(col => col.header);
+  const headerRow = worksheet.addRow(headerRowData);
+  headerRow.height = 26;
+  
+  // Estilo de la cabecera (Azul/Cian corporativo, texto blanco negrita)
+  headerRow.eachCell((cell) => {
+    cell.fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: '0E7490' }
+    };
+    cell.font = {
+      name: 'Arial',
+      size: 11,
+      bold: true,
+      color: { argb: 'FFFFFF' }
+    };
+    cell.alignment = { vertical: 'middle', horizontal: 'left' };
+    cell.border = {
+      top: { style: 'thin', color: { argb: '0891B2' } },
+      bottom: { style: 'thin', color: { argb: '0891B2' } },
+      left: { style: 'thin', color: { argb: '0891B2' } },
+      right: { style: 'thin', color: { argb: '0891B2' } }
+    };
   });
   
-  // Agregar BOM para que Excel lea UTF-8 correctamente
-  const blob = new Blob(["\ufeff" + csv], { type: 'text/csv;charset=utf-8;' });
+  // 4. Agregar datos de productos
+  todosProductos.forEach((p, i) => {
+    const rowData = [
+      i + 1,
+      p.codigo ? String(p.codigo) : '-', // Mantener como string para preservar ceros
+      p.detalle,
+      p.pcompra ? Number(p.pcompra) : 0,
+      p.pventa ? Number(p.pventa) : 0,
+      p.ppromo ? Number(p.ppromo) : '-',
+      Number(p.stock)
+    ];
+    if (EXP) rowData.push(p.expmes ? `${p.expmes}/${p.expanio}` : '-');
+    
+    const row = worksheet.addRow(rowData);
+    row.height = 20;
+    
+    // Zebra striping alternado
+    const isEven = i % 2 === 1;
+    const bgColor = isEven ? 'F8FAFC' : 'FFFFFF';
+    
+    row.eachCell((cell, colNumber) => {
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: bgColor }
+      };
+      cell.font = { name: 'Arial', size: 10 };
+      cell.border = {
+        top: { style: 'thin', color: { argb: 'E2E8F0' } },
+        bottom: { style: 'thin', color: { argb: 'E2E8F0' } },
+        left: { style: 'thin', color: { argb: 'E2E8F0' } },
+        right: { style: 'thin', color: { argb: 'E2E8F0' } }
+      };
+      
+      // Alineaciones y formatos numéricos personalizados
+      if (colNumber === 1 || colNumber === 2 || colNumber === 7 || (EXP && colNumber === 8)) {
+        cell.alignment = { horizontal: 'center', vertical: 'middle' };
+        if (colNumber === 2) cell.numFmt = '@'; // Forzar formato texto para códigos
+      } else if (colNumber === 4 || colNumber === 5 || colNumber === 6) {
+        cell.alignment = { horizontal: 'right', vertical: 'middle' };
+        if (typeof cell.value === 'number') {
+          cell.numFmt = '"S/" #,##0.00';
+        }
+      } else {
+        cell.alignment = { horizontal: 'left', vertical: 'middle' };
+      }
+    });
+  });
+  
+  // Establecer anchos de columna definidos
+  columns.forEach((col, index) => {
+    worksheet.getColumn(index + 1).width = col.width;
+  });
+  
+  // 5. Escribir y descargar el archivo XLSX binario
+  const buffer = await workbook.xlsx.writeBuffer();
+  const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'Inventario_Productos_' + new Date().toISOString().split('T')[0] + '.csv';
+  a.download = 'Inventario_Productos_' + new Date().toISOString().split('T')[0] + '.xlsx';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);

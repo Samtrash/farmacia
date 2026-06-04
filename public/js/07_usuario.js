@@ -46,7 +46,7 @@ function renderUsuarios(lista) {
       '<td colspan="7">' +
         '<div class="row-content" id="details-' + u.persona_id + '">' +
           '<div style="padding: 12px 16px; font-size:12px;">' +
-            '<div><strong>DNI:</strong> ' + u.dni_ruc + '</div>' +
+            '<div><strong>Documento:</strong> ' + u.dni_ruc + '</div>' +
             '<div style="margin-top:4px"><strong>Apellidos:</strong> ' + (u.apellidos || '-') + '</div>' +
             '<div style="margin-top:4px"><strong>Contraseña:</strong> ••••</div>' +
             '<div style="margin-top:12px; display:flex; gap:8px;">' +

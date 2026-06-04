@@ -133,4 +133,6 @@
 <input type="hidden" id="baseUrl" value="<?= base_url() ?>">
 <input type="hidden" id="tieneExp" value="<?= session('exp') ? '1' : '0' ?>">
 
+<script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+
 <?= $this->endSection() ?>

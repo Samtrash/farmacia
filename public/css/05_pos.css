@@ -1,9 +1,15 @@
 /* ─── POS LAYOUT ─── */
+:root {
+  --topbar-h: 48px; /* altura real del topbar */
+}
+
 .pos-layout {
   display: grid;
   grid-template-columns: 1fr 380px;
   gap: 16px;
-  height: calc(100dvh - 68px);
+  height: calc(100dvh - var(--topbar-h));
+  max-height: calc(100dvh - var(--topbar-h));
+  overflow: hidden;
   padding: 16px;
 }
 
@@ -14,11 +20,17 @@
   gap: 8px;
   margin-bottom: 12px;
 }
-.pos-catalog .search-section .search-bar { flex: 1; }
+.pos-catalog .search-section .search-bar-code {
+  flex: 0 0 200px;
+}
+.pos-catalog .search-section .search-bar-name {
+  flex: 1;
+}
 
 .pos-catalog .catalog-table {
   overflow-y: auto;
-  max-height: calc(100dvh - 180px);
+  /* topbar + search-section (38px) + gap + padding */
+  max-height: calc(100dvh - var(--topbar-h) - 38px - 12px - 32px - 16px);
   border-radius: var(--radius);
   background: white;
   box-shadow: var(--shadow);
@@ -169,8 +181,8 @@
 }
 .cart-client .client-row {
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 4px 8px;
+  grid-template-columns: auto 75px auto 1fr;
+  gap: 8px;
   align-items: center;
 }
 .cart-client .client-row label {
@@ -188,6 +200,9 @@
   font-size: 13px;
   outline: none;
   min-width: 0;
+}
+.cart-client .client-row #nombreRazon {
+  grid-column: span 3;
 }
 .cart-client .client-row input:focus,
 .cart-client .client-row select:focus {
@@ -253,22 +268,96 @@
     grid-template-columns: 1fr;
     grid-template-rows: auto auto;
     height: auto;
+    max-height: none;
     overflow: visible;
   }
   .pos-cart { min-height: auto; }
-  .pos-catalog .catalog-table { max-height: 55dvh; }
+  .pos-catalog .catalog-table { max-height: 50dvh; }
   
   .pos-catalog .search-section {
-    flex-direction: column;
+    flex-direction: row; /* Stay on the same row */
+    width: 100%;
   }
   .pos-catalog .search-section .search-bar {
-    flex: none !important;
+    transition: flex 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
+    overflow: hidden;
+  }
+  .pos-catalog .search-section .search-bar input {
+    min-width: 0;
+  }
+  
+  /* DEFAULT COLLAPSED SCANNER / EXPANDED SEARCH */
+  .pos-catalog .search-section .search-bar-code {
+    flex: 0 0 44px !important;
+    min-width: 44px;
+    padding: 0;
+    justify-content: center;
+  }
+  .pos-catalog .search-section .search-bar-code input {
+    width: 0;
+    opacity: 0;
+    padding: 0;
+    pointer-events: none;
+    transition: width 0.3s ease, opacity 0.2s ease;
+  }
+  .pos-catalog .search-section .search-bar-name {
+    flex: 1 !important;
+  }
+  .pos-catalog .search-section .search-bar-name input {
     width: 100%;
+    transition: width 0.3s ease, opacity 0.2s ease;
+  }
+  
+  /* WHEN SCANNER IS FOCUSED: EXPAND SCANNER / COLLAPSE SEARCH */
+  .pos-catalog .search-section:has(.search-bar-code:focus-within) .search-bar-code {
+    flex: 1 !important;
+    padding: 0 12px;
+    justify-content: flex-start;
+  }
+  .pos-catalog .search-section:has(.search-bar-code:focus-within) .search-bar-code input {
+    width: 100%;
+    opacity: 1;
+    pointer-events: auto;
+    padding-left: 8px;
+  }
+  
+  .pos-catalog .search-section:has(.search-bar-code:focus-within) .search-bar-name {
+    flex: 0 0 44px !important;
+    min-width: 44px;
+    padding: 0;
+    justify-content: center;
+  }
+  .pos-catalog .search-section:has(.search-bar-code:focus-within) .search-bar-name input {
+    width: 0;
+    opacity: 0;
+    pointer-events: none;
   }
   
   .cart-actions {
-    grid-template-columns: 1fr;
-    gap: 10px;
-    padding: 12px;
+    grid-template-columns: 1fr 1fr 1fr; /* Stay on the same row */
+    gap: 6px;
+    padding: 10px;
+  }
+  .cart-actions button {
+    font-size: 11px; /* Smaller text to fit mobile screen */
+    padding: 12px 4px;
+    letter-spacing: 0px;
+  }
+
+  /* Compact Document Form on Mobile */
+  .cart-client .client-row {
+    grid-template-columns: 80px 1fr;
+    gap: 8px;
+  }
+  .cart-client .client-row label:not(#lblNombre) {
+    display: none;
+  }
+  .cart-client .client-row #lblNombre {
+    grid-column: 1 / -1;
+    margin-top: 4px;
+    margin-bottom: -4px;
+  }
+  .cart-client .client-row #nombreRazon {
+    grid-column: 1 / -1;
   }
 }

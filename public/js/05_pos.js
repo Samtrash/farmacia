@@ -54,7 +54,7 @@ function agregarAlCarrito(stock, id, nombre, precio) {
     customPrompt('Cantidad', '¿Cuántas unidades de ' + nombre + ' desea añadir?', 1, function(val) {
       const cant = parseInt(val) || 1;
       procesarAgregar(cant, stock, id, nombre, precio);
-    });
+    }, 'number');
   } else {
     // Si la columna está visible (escritorio), usamos el valor del input directamente
     const cant = parseInt(qtyInput.value) || 1;
@@ -127,6 +127,7 @@ function cambiarTipo() {
   document.getElementById('lblDoc').textContent = tipo === '1' ? 'N° DNI:' : 'N° RUC:';
   document.getElementById('lblNombre').textContent = tipo === '1' ? 'Nombres:' : 'Razón Social:';
   inputDoc.maxLength = tipo === '1' ? 8 : 11;
+  inputDoc.placeholder = tipo === '1' ? 'Ingrese DNI' : 'Ingrese RUC';
 }
 
 /* ─── PROCESAR VENTA ─── */
@@ -208,3 +209,15 @@ function procesarVenta(formato) {
       document.querySelectorAll('.cart-actions button').forEach(b => b.disabled = false);
     });
 }
+
+// Focus input when clicking on search-bar container (especially useful for mobile collapsed icons)
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.search-bar').forEach(bar => {
+    bar.addEventListener('click', (e) => {
+      if (e.target.tagName !== 'INPUT') {
+        const inp = bar.querySelector('input');
+        if (inp) inp.focus();
+      }
+    });
+  });
+});

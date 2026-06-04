@@ -15,7 +15,7 @@
         <thead>
           <tr>
             <th style="width:5%" class="hide-mobile">#</th>
-            <th style="width:15%" class="hide-mobile">DNI</th>
+            <th style="width:15%" class="hide-mobile">Documento</th>
             <th>Nombres</th>
             <th class="hide-mobile">Apellidos</th>
             <th style="width:12%" class="hide-mobile">Contraseña</th>
@@ -41,8 +41,8 @@
     <div class="modal-body">
       <input type="hidden" id="userId">
       <div class="form-group">
-        <label>DNI</label>
-        <input class="form-control" type="text" id="userDni" maxlength="8" onkeypress="soloNumeros(event)">
+        <label>Documento / ID</label>
+        <input class="form-control" type="text" id="userDni" maxlength="12" onkeypress="soloNumeros(event)">
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
         <div class="form-group">

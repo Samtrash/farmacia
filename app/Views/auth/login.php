@@ -181,8 +181,8 @@ body::after  { width:300px;height:300px;bottom:-80px;left:-60px; }
 
   <form id="loginForm">
     <div class="field">
-      <label>Usuario (DNI)</label>
-      <input type="text" id="user" name="user" placeholder="Ej: 70000000" maxlength="11" autofocus
+      <label>Usuario</label>
+      <input type="text" id="user" name="user" placeholder="Ej: 1001" maxlength="11" autofocus
              onkeypress="if(event.which<48||event.which>57)event.preventDefault()">
     </div>
     <div class="field">
@@ -231,11 +231,17 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
     } else {
       err.textContent = d.msg;
       btn.disabled = false;
+      document.getElementById('user').value = '';
+      document.getElementById('pass').value = '';
+      document.getElementById('user').focus();
     }
   })
   .catch(() => {
     err.textContent = 'Error de conexión';
     btn.disabled = false;
+    document.getElementById('user').value = '';
+    document.getElementById('pass').value = '';
+    document.getElementById('user').focus();
   });
 });
 
