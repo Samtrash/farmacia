@@ -14,13 +14,13 @@
       <table class="tabla">
         <thead>
           <tr>
-            <th style="width:5%" class="hide-mobile">#</th>
-            <th style="width:15%" class="hide-mobile">Documento</th>
+            <th style="width:4%" class="hide-1100">#</th>
+            <th style="width:15%" class="hide-980">Documento</th>
             <th>Nombres</th>
-            <th class="hide-mobile">Apellidos</th>
-            <th style="width:12%" class="hide-mobile">Contraseña</th>
+            <th class="hide-860">Apellidos</th>
+            <th style="width:12%" class="hide-760">Contraseña</th>
             <th style="width:12%">Rol</th>
-            <th style="width:15%; text-align:center">Acciones</th>
+            <th style="width:9%"></th>
           </tr>
         </thead>
         <tbody id="tbUsuarios">

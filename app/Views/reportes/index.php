@@ -2,11 +2,10 @@
 <?= $this->section('contenido') ?>
 
 <div class="content has-footbar">
-  <!-- Selector de fecha -->
-  <div class="card" style="margin-bottom:16px">
-    <div class="card-body" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-      <span style="font-weight:600;color:var(--gray-600);font-size:13px">Periodo:</span>
-      <select class="form-control" id="selMes" style="width:160px">
+  <div class="reporte-filtro-bar" style="margin-bottom:16px">
+    <div class="reporte-filtro-inner">
+      <span class="reporte-filtro-label">Periodo:</span>
+      <select class="form-control reporte-select" id="selMes">
         <?php
         $meses = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
         $mesActual = date('n');
@@ -15,9 +14,10 @@
         <option value="<?= $i ?>" <?= $i==$mesActual?'selected':'' ?>><?= $meses[$i] ?></option>
         <?php endfor; ?>
       </select>
-      <input class="form-control" type="text" id="inputAnio" value="<?= date('Y') ?>" maxlength="4" style="width:90px;text-align:center" onkeypress="soloNumeros(event)">
-      <button class="btn btn-primary" onclick="buscarReporte()">
-        <span class="material-symbols-outlined" style="font-size:18px">search</span> Buscar
+      <input class="form-control reporte-anio" type="text" id="inputAnio" value="<?= date('Y') ?>" maxlength="4" onkeypress="soloNumeros(event)">
+      <button class="btn btn-primary reporte-btn-buscar" onclick="buscarReporte()">
+        <span class="material-symbols-outlined" style="font-size:18px">search</span>
+        <span class="reporte-buscar-text">Buscar</span>
       </button>
     </div>
   </div>

@@ -19,17 +19,17 @@
       <table class="tabla">
         <thead>
           <tr>
-            <th style="width:5%" class="hide-mobile">#</th>
-            <th style="width:14%" class="hide-mobile">Código</th>
+            <th style="width:4%" class="hide-1200">#</th>
+            <th style="width:14%" class="hide-1100">Código</th>
             <th>Descripción</th>
-            <th style="width:8%" class="hide-mobile">P. Compra</th>
-            <th style="width:8%">P. Venta</th>
-            <th style="width:8%" class="hide-mobile">P. Promo</th>
+            <th style="width:9%" class="hide-980">P. Compra</th>
+            <th style="width:9%">P. Venta</th>
+            <th style="width:9%" class="hide-860">P. Promo</th>
             <th style="width:7%">Stock</th>
             <?php if(session('exp')): ?>
-            <th style="width:9%" class="hide-mobile">Vencimiento</th>
+            <th style="width:9%" class="hide-760">Vencimiento</th>
             <?php endif; ?>
-            <th style="width:12%; text-align:center">Acciones</th>
+            <th style="width:9%"></th>
           </tr>
         </thead>
         <tbody id="tbProductos">

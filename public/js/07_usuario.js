@@ -20,45 +20,42 @@ function renderUsuarios(lista) {
   let html = '';
   lista.forEach((u, i) => {
     html += '<tr>' +
-      '<td class="text-center hide-mobile">' + (i+1) + '</td>' +
-      '<td class="text-center hide-mobile">' + u.dni_ruc + '</td>' +
-      '<td style="text-align:left;padding-left:8px">' + 
+      '<td class="text-center hide-1100" style="color:var(--gray-400);font-size:12px">' + (i+1) + '</td>' +
+      '<td class="text-center hide-980" style="font-size:12px;color:var(--gray-600)">' + u.dni_ruc + '</td>' +
+      '<td style="text-align:left;padding-left:8px">' +
         '<span class="text-truncate" title="' + u.nombre_razon + '">' + u.nombre_razon + '</span>' +
       '</td>' +
-      '<td style="text-align:left;padding-left:8px" class="hide-mobile">' + u.apellidos + '</td>' +
-      '<td class="text-center hide-mobile">••••</td>' +
+      '<td style="text-align:left;padding-left:8px" class="hide-860">' + (u.apellidos || '-') + '</td>' +
+      '<td class="text-center hide-760">••••</td>' +
       '<td class="text-center"><span class="badge ' + (u.master == 2 ? 'badge-info' : 'badge-success') + '">' +
         (u.master == 2 ? 'Admin' : 'Vendedor') + '</span></td>' +
-      '<td class="text-center">' +
-        '<div style="display:flex; gap:4px; justify-content:center">' +
-          '<button class="btn btn-sm btn-primary btn-action-mobile" onclick="modalEditarUsuario(' + u.persona_id + ')" title="Editar">' +
-            '<span class="material-symbols-outlined">edit</span><span class="btn-text-mobile"> Editar</span>' +
+      '<td>' +
+        '<div class="row-actions">' +
+          '<button class="btn-icon btn-icon-edit" onclick="modalEditarUsuario(' + u.persona_id + ')" title="Editar">' +
+            '<span class="material-symbols-outlined">edit</span>' +
           '</button>' +
-          '<button class="btn btn-sm btn-danger btn-action-mobile" onclick="eliminarUsuario(' + u.persona_id + ',\'' + u.nombre_razon.replace(/'/g,"\\'") + '\')" title="Eliminar">' +
-            '<span class="material-symbols-outlined">delete</span><span class="btn-text-mobile"> Eliminar</span>' +
+          '<button class="btn-icon btn-icon-delete" onclick="eliminarUsuario(' + u.persona_id + ',\'' + u.nombre_razon.replace(/'/g,"\\'") + '\')" title="Eliminar">' +
+            '<span class="material-symbols-outlined">delete</span>' +
           '</button>' +
           '<button class="btn-expand" onclick="toggleRow(' + u.persona_id + ')"><span class="material-symbols-outlined">expand_more</span></button>' +
         '</div>' +
       '</td></tr>';
-      
-    // Fila expandible
+
+    // Fila expandible — solo datos, sin botones duplicados
     html += '<tr class="row-details" id="row-' + u.persona_id + '">' +
       '<td colspan="7">' +
         '<div class="row-content" id="details-' + u.persona_id + '">' +
-          '<div style="padding: 12px 16px; font-size:12px;">' +
-            '<div><strong>Documento:</strong> ' + u.dni_ruc + '</div>' +
-            '<div style="margin-top:4px"><strong>Apellidos:</strong> ' + (u.apellidos || '-') + '</div>' +
-            '<div style="margin-top:4px"><strong>Contraseña:</strong> ••••</div>' +
-            '<div style="margin-top:12px; display:flex; gap:8px;">' +
-              '<button class="btn btn-sm btn-primary" onclick="modalEditarUsuario(' + u.persona_id + ')"><span class="material-symbols-outlined" style="font-size:16px">edit</span> Editar</button>' +
-              '<button class="btn btn-sm btn-danger" onclick="eliminarUsuario(' + u.persona_id + ',\'' + u.nombre_razon.replace(/'/g,"\\'") + '\')"><span class="material-symbols-outlined" style="font-size:16px">delete</span> Eliminar</button>' +
-            '</div>' +
+          '<div style="padding: 12px 16px; font-size:12px; display:flex; flex-wrap:wrap; gap:6px 20px;">' +
+            '<span><strong>Documento:</strong> ' + u.dni_ruc + '</span>' +
+            '<span><strong>Apellidos:</strong> ' + (u.apellidos || '-') + '</span>' +
+            '<span><strong>Contraseña:</strong> ••••</span>' +
           '</div>' +
         '</div>' +
       '</td></tr>';
   });
   tb.innerHTML = html;
 }
+
 
 function modalNuevoUsuario() {
   document.getElementById('modalTituloU').textContent = 'Agregar Usuario';

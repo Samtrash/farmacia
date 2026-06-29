@@ -1,0 +1,155 @@
+/* ─── AJUSTES DEL SISTEMA ─── */
+.ajustes-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding-bottom: 40px;
+}
+
+.ajustes-header {
+    margin-bottom: 24px;
+}
+.ajustes-header h2 {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--gray-900);
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+}
+.ajustes-header p {
+    color: var(--gray-500);
+    font-size: 14px;
+}
+
+.ajustes-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.card-header-flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.header-title {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.header-title .material-symbols-outlined {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 24px;
+}
+
+.icon-negocio {
+    background: #fff7ed;
+    color: #ea580c;
+}
+
+.icon-licencia {
+    background: #f0fdfa;
+    color: #0d9488;
+}
+
+.header-title h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gray-800);
+    margin-bottom: 2px;
+}
+.header-title p {
+    font-size: 13px;
+    color: var(--gray-500);
+    margin: 0;
+}
+
+.ajustes-card .card-body {
+    padding: 24px;
+}
+
+.ajustes-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.info-row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    align-items: center;
+    gap: 16px;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--gray-200);
+}
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--gray-500);
+    letter-spacing: 0.5px;
+}
+
+.info-value {
+    font-size: 14px;
+    color: var(--gray-800);
+    font-weight: 500;
+}
+
+.edit-mode {
+    display: none;
+}
+.form-actions {
+    margin-top: 24px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+/* Modificadores de estado de edición */
+.is-editing .view-mode {
+    display: none;
+}
+.is-editing .edit-mode {
+    display: block;
+}
+.is-editing .info-row {
+    align-items: flex-start;
+    padding: 4px 0;
+}
+.is-editing .info-label {
+    margin-top: 10px;
+}
+
+.border-top {
+    border-top: 1px solid var(--gray-200);
+}
+.mt-4 {
+    margin-top: 24px;
+}
+.pt-3 {
+    padding-top: 16px;
+}
+
+@media (max-width: 600px) {
+    .info-row {
+        grid-template-columns: 1fr;
+        gap: 4px;
+        padding: 12px 0;
+    }
+    .is-editing .info-label {
+        margin-top: 0;
+    }
+}

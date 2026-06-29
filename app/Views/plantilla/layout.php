@@ -30,7 +30,7 @@
       <span class="material-symbols-outlined">point_of_sale</span> Ventas
     </a>
 
-    <?php if(session('master') == 2): ?>
+    <?php if(session('master') >= 2): ?>
     <a href="<?= base_url('productos') ?>" class="<?= $uri === 'productos' ? 'active' : '' ?>">
       <span class="material-symbols-outlined">inventory_2</span> Productos
     </a>
@@ -39,6 +39,12 @@
     </a>
     <a href="<?= base_url('reportes') ?>" class="<?= $uri === 'reportes' ? 'active' : '' ?>">
       <span class="material-symbols-outlined">monitoring</span> Reportes
+    </a>
+    <?php endif; ?>
+
+    <?php if(session('master') == 3): ?>
+    <a href="<?= base_url('ajustes') ?>" class="<?= $uri === 'ajustes' ? 'active' : '' ?>">
+      <span class="material-symbols-outlined">settings</span> Ajustes
     </a>
     <?php endif; ?>
 

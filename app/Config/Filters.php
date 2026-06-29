@@ -108,6 +108,6 @@ class Filters extends BaseFilters
      * @var array<string, array<string, list<string>>>
      */
     public array $filters = [
-        'auth' => ['before' => ['ventas*', 'productos*', 'usuarios*', 'reportes*', 'caja*']],
+        'auth' => ['before' => ['ventas*', 'productos*', 'usuarios*', 'reportes*', 'caja*', 'ajustes*']],
     ];
 }

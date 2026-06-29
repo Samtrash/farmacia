@@ -44,12 +44,18 @@ function renderReporte(data) {
   let totalMesVentas = 0;
   let totalMesCajas = 0;
   let totalRegistros = 0;
-  let html = '<div class="card"><div class="card-header"><h2>Reporte de ventas — ' + data.titulo + '</h2></div>';
-  html += '<div class="table-wrap"><table class="tabla"><thead><tr>' +
-    '<th style="width:5%" class="hide-mobile">#</th><th style="width:12%">Fecha</th><th style="width:18%" class="hide-mobile">Comprobante</th>' +
-    '<th style="width:13%">Total</th><th class="hide-mobile">Cajero</th><th style="width:10%; text-align:center">Detalle</th></tr></thead><tbody>';
-
   let num = 1;
+
+  let html = '<div class="reporte-titulo-wrap"><h2 class="reporte-titulo">Reporte de ventas — ' + data.titulo + '</h2></div>';
+  html += '<div class="reporte-columnas">';
+  html += '<div class="reporte-col-header hide-mobile">#</div>';
+  html += '<div class="reporte-col-header">Fecha</div>';
+  html += '<div class="reporte-col-header hide-mobile">Comprobante</div>';
+  html += '<div class="reporte-col-header">Total</div>';
+  html += '<div class="reporte-col-header hide-mobile">Cajero</div>';
+  html += '<div class="reporte-col-header" style="text-align:center">Detalle</div>';
+  html += '</div>';
+
   fechas.forEach(fecha => {
     const ventas = data.ventas[fecha];
     const resumen = data.resumenDias[fecha];
@@ -57,44 +63,53 @@ function renderReporte(data) {
     totalMesCajas += Number(resumen.cajaInicial);
     totalRegistros += ventas.length;
 
+    const esHoy = fecha === new Date().toISOString().split('T')[0];
+    const efectivoDia = Number(resumen.efectivo).toFixed(2);
+    const ventasDia   = Number(resumen.totalDia).toFixed(2);
+    const cajaDia     = Number(resumen.cajaInicial).toFixed(2);
+
+    html += '<div class="dia-block">';
+
+    // ─── Header del bloque (resumen del día) ───
+    html += '<div class="dia-header">' +
+      '<div class="dia-header-left">' +
+        '<span class="dia-fecha-icon">📅</span>' +
+        '<span class="dia-fecha-label">' + fecha + '</span>' +
+        '<span class="dia-pill">Ventas: <strong>S/ ' + ventasDia + '</strong></span>' +
+        '<span class="dia-pill hide-mobile">+ Caja inicial: <strong>S/ ' + cajaDia + '</strong></span>' +
+        '<span class="dia-pill dia-pill-total">= S/ ' + efectivoDia + '</span>' +
+      '</div>' +
+      '<button class="btn btn-sm btn-warning dia-btn-caja" onclick="editarCajaInicial(\'' + fecha + '\',' + Number(resumen.cajaInicial) + ')">' +
+        '<span class="material-symbols-outlined" style="font-size:14px;vertical-align:middle">edit</span>' +
+        '<span class="hide-mobile"> Editar Caja</span>' +
+      '</button>' +
+    '</div>';
+
+    // ─── Filas de ventas del día ───
+    html += '<div class="dia-tabla-wrap"><table class="tabla dia-tabla"><tbody>';
     ventas.forEach(v => {
-      const tipoLabel = v.formato == 3 ? 'Boleta' : (v.formato == 1 ? 'Factura' : 'Nota');
+      const tipoLabel  = v.formato == 3 ? 'Boleta' : (v.formato == 1 ? 'Factura' : 'Nota');
       const badgeClass = v.formato == 3 ? 'badge-success' : (v.formato == 1 ? 'badge-warning' : 'badge-info');
       html += '<tr>' +
-        '<td class="text-center hide-mobile">' + (num++) + '</td>' +
-        '<td class="text-center">' + v.fecha_fmt + '</td>' +
-        '<td class="text-center hide-mobile"><span class="badge ' + badgeClass + '">' + tipoLabel + '</span> ' + v.numero_recibo + '</td>' +
-        '<td class="text-right" style="padding-right:10px;font-weight:600">S/ ' + Number(v.total).toFixed(2) + '</td>' +
-        '<td style="padding-left:8px" class="hide-mobile">' + (v.atiende || '-') + '</td>' +
-        '<td class="text-center">' +
-          '<button class="btn btn-sm btn-primary" onclick="verDetalle(' + v.id + ',\'' + v.numero_recibo + '\', \'' + (v.atiende || '-') + '\')" title="Ver detalle"><span class="material-symbols-outlined">visibility</span></button>' +
-        '</td>' +
-        '</tr>';
-    });
-
-    // Subtotal del día
-    html += '<tr style="background:#e2e8f0">' +
-      '<td colspan="6" style="padding:12px 14px; border-top: 1.5px solid #cbd5e1; border-bottom: 4px solid #94a3b8;">' +
-        '<div style="display:flex; flex-wrap:wrap; align-items:center; gap:6px 16px; line-height:1.7; font-size:12px;">' +
-          '<span>📅 <strong>' + fecha + '</strong></span>' +
-          '<span>Ventas: <strong style="color:#0e7490">S/ ' + Number(resumen.totalDia).toFixed(2) + '</strong></span>' +
-          '<span>+ Caja inicial: <strong>S/ ' + Number(resumen.cajaInicial).toFixed(2) + '</strong></span>' +
-          '<span>= Efectivo: <strong style="color:#059669; font-size:13px">S/ ' + Number(resumen.efectivo).toFixed(2) + '</strong></span>' +
-          '<button class="btn btn-sm btn-warning" onclick="editarCajaInicial(\'' + fecha + '\',' + Number(resumen.cajaInicial) + ')" style="margin-left:auto">' +
-            '<span class="material-symbols-outlined" style="font-size:14px;vertical-align:middle">edit</span> Editar Caja' +
+        '<td class="text-center hide-mobile" style="width:5%;color:var(--gray-400);font-size:12px">' + (num++) + '</td>' +
+        '<td style="width:12%;color:var(--gray-600);font-size:12px">' + v.fecha_fmt + '</td>' +
+        '<td class="text-center hide-mobile" style="width:18%"><span class="badge ' + badgeClass + '">' + tipoLabel + '</span> ' + v.numero_recibo + '</td>' +
+        '<td class="text-right" style="width:13%;padding-right:10px;font-weight:700;color:var(--primary-dark)">S/ ' + Number(v.total).toFixed(2) + '</td>' +
+        '<td class="hide-mobile" style="padding-left:8px;color:var(--gray-600);font-size:13px">' + (v.atiende || '-') + '</td>' +
+        '<td class="text-center" style="width:10%">' +
+          '<button class="btn btn-sm btn-primary" onclick="verDetalle(' + v.id + ',\'' + v.numero_recibo + '\', \'' + (v.atiende || '-') + '\')" title="Ver detalle">' +
+            '<span class="material-symbols-outlined">visibility</span>' +
           '</button>' +
-        '</div>' +
-      '</td></tr>';
+        '</td>' +
+      '</tr>';
+    });
+    html += '</tbody></table></div>';
+    html += '</div>'; // fin dia-block
   });
 
   const efectivoTotal = totalMesVentas + totalMesCajas;
-  html += '</tbody></table></div></div>';
-  
-  // Footbar
   html += '<div class="footbar" style="justify-content: space-between; background: var(--gray-900); color: white; border-top: none;">' +
-    '<div style="font-size: 13px; opacity: 0.8;">' +
-      'Registros: <strong>' + totalRegistros + '</strong>' +
-    '</div>' +
+    '<div style="font-size: 13px; opacity: 0.8;">Registros: <strong>' + totalRegistros + '</strong></div>' +
     '<div style="font-size: 13px; text-align: right;">' +
       '<span class="hide-mobile">Ingresos: <strong>S/ ' + totalMesVentas.toFixed(2) + '</strong> + ' +
       'Cajas: <strong>S/ ' + totalMesCajas.toFixed(2) + '</strong> = </span>' +
@@ -104,6 +119,7 @@ function renderReporte(data) {
 
   container.innerHTML = html;
 }
+
 
 function verDetalle(id, numero, cajero) {
   ventaActualId = id;

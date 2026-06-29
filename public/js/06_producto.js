@@ -23,23 +23,23 @@ function renderTabla(lista) {
   lista.forEach((p, i) => {
     // Fila principal
     html += '<tr>' +
-      '<td class="text-center hide-mobile">' + (i+1) + '</td>' +
-      '<td class="hide-mobile">' + (p.codigo || '') + '</td>' +
+      '<td class="text-center hide-1200" style="color:var(--gray-400);font-size:12px">' + (i+1) + '</td>' +
+      '<td class="hide-1100" style="font-size:12px;color:var(--gray-600)">' + (p.codigo || '') + '</td>' +
       '<td style="text-align:left;padding-left:8px">' + 
         '<span class="text-truncate" title="' + p.detalle + '">' + p.detalle + '</span>' +
       '</td>' +
-      '<td class="text-center hide-mobile">S/ ' + Number(p.pcompra).toFixed(2) + '</td>' +
+      '<td class="text-center hide-980">S/ ' + Number(p.pcompra).toFixed(2) + '</td>' +
       '<td class="text-center" style="font-weight:600;color:var(--success)">S/ ' + Number(p.pventa).toFixed(2) + '</td>' +
-      '<td class="text-center hide-mobile">' + (p.ppromo ? 'S/ '+Number(p.ppromo).toFixed(2) : '-') + '</td>' +
+      '<td class="text-center hide-860">' + (p.ppromo ? 'S/ '+Number(p.ppromo).toFixed(2) : '-') + '</td>' +
       '<td class="text-center">' + p.stock + '</td>' +
-      (EXP ? '<td class="text-center hide-mobile">' + (p.expmes || '-') + '/' + (p.expanio || '-') + '</td>' : '') +
-      '<td class="text-center">' +
-        '<div style="display:flex; gap:4px; justify-content:center">' +
-          '<button class="btn btn-sm btn-primary btn-action-mobile" onclick="modalEditar(' + p.id + ')" title="Editar">' +
-            '<span class="material-symbols-outlined">edit</span><span class="btn-text-mobile"> Editar</span>' +
+      (EXP ? '<td class="text-center hide-760">' + (p.expmes || '-') + '/' + (p.expanio || '-') + '</td>' : '') +
+      '<td>' +
+        '<div class="row-actions">' +
+          '<button class="btn-icon btn-icon-edit" onclick="modalEditar(' + p.id + ')" title="Editar">' +
+            '<span class="material-symbols-outlined">edit</span>' +
           '</button>' +
-          '<button class="btn btn-sm btn-danger btn-action-mobile" onclick="eliminarProducto(' + p.id + ',\'' + p.detalle.replace(/'/g,"\\'") + '\')" title="Eliminar">' +
-            '<span class="material-symbols-outlined">delete</span><span class="btn-text-mobile"> Eliminar</span>' +
+          '<button class="btn-icon btn-icon-delete" onclick="eliminarProducto(' + p.id + ',\'' + p.detalle.replace(/'/g,"\\'") + '\')" title="Eliminar">' +
+            '<span class="material-symbols-outlined">delete</span>' +
           '</button>' +
           '<button class="btn-expand" onclick="toggleRow(' + p.id + ')"><span class="material-symbols-outlined">expand_more</span></button>' +
         '</div>' +
@@ -54,10 +54,6 @@ function renderTabla(lista) {
             '<div style="margin-top:4px"><strong>P. Compra:</strong> S/ ' + Number(p.pcompra).toFixed(2) + '</div>' +
             '<div style="margin-top:4px"><strong>P. Promo:</strong> ' + (p.ppromo ? 'S/ '+Number(p.ppromo).toFixed(2) : '-') + '</div>' +
             (EXP ? '<div style="margin-top:4px"><strong>Vence:</strong> ' + (p.expmes || '-') + '/' + (p.expanio || '-') + '</div>' : '') +
-            '<div style="margin-top:12px; display:flex; gap:8px;">' +
-              '<button class="btn btn-sm btn-primary" onclick="modalEditar(' + p.id + ')"><span class="material-symbols-outlined" style="font-size:16px">edit</span> Editar</button>' +
-              '<button class="btn btn-sm btn-danger" onclick="eliminarProducto(' + p.id + ',\'' + p.detalle.replace(/'/g,"\\'") + '\')"><span class="material-symbols-outlined" style="font-size:16px">delete</span> Eliminar</button>' +
-            '</div>' +
           '</div>' +
         '</div>' +
       '</td></tr>';
@@ -163,7 +159,7 @@ function imprimirReporteProductos() {
   html += '<div style="text-align: right; margin-bottom: 10px;">Fecha: ' + new Date().toLocaleDateString() + '</div>';
   
   html += '<table><thead><tr>';
-  html += '<th>#</th><th>Código</th><th>Descripción</th><th>P. Compra</th><th>P. Venta</th><th>Stock</th>';
+  html += '<th>#</th><th>Código</th><th>Descripción</th><th class="text-right">P. Compra (S/)</th><th class="text-right">P. Venta (S/)</th><th class="text-center">Stock</th>';
   const EXP = document.getElementById('tieneExp').value === '1';
   if (EXP) html += '<th>Vencimiento</th>';
   html += '</tr></thead><tbody>';
@@ -173,8 +169,8 @@ function imprimirReporteProductos() {
     html += '<td class="text-center">' + (i + 1) + '</td>';
     html += '<td>' + (p.codigo || '-') + '</td>';
     html += '<td>' + p.detalle + '</td>';
-    html += '<td class="text-right">S/ ' + Number(p.pcompra).toFixed(2) + '</td>';
-    html += '<td class="text-right">S/ ' + Number(p.pventa).toFixed(2) + '</td>';
+    html += '<td class="text-right">' + Number(p.pcompra).toFixed(2) + '</td>';
+    html += '<td class="text-right">' + Number(p.pventa).toFixed(2) + '</td>';
     html += '<td class="text-center">' + p.stock + '</td>';
     if (EXP) html += '<td class="text-center">' + (p.expmes ? p.expmes + '/' + p.expanio : '-') + '</td>';
     html += '</tr>';

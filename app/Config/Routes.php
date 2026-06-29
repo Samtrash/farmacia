@@ -3,6 +3,7 @@ use CodeIgniter\Router\RouteCollection;
 
 // ─── Auth ───
 $routes->get('/',            'AuthController::index');
+$routes->get('login',        'AuthController::index');
 $routes->post('login',      'AuthController::login');
 $routes->get('logout',      'AuthController::logout');
 $routes->post('caja/abrir', 'AuthController::abrirCaja');
@@ -40,3 +41,8 @@ $routes->post('reportes/caja/(:segment)', 'ReporteController::editarCaja/$1');
 // Devoluciones
 $routes->get('devoluciones/migrar', 'DevolucionController::migrar');
 $routes->post('devoluciones/procesar', 'DevolucionController::procesar');
+
+// ─── Ajustes (solo superusuario master=3) ───
+$routes->get('ajustes',                   'AjustesController::index');
+$routes->post('ajustes/negocio',          'AjustesController::guardarNegocio');
+$routes->post('ajustes/licencia',         'AjustesController::guardarLicencia');

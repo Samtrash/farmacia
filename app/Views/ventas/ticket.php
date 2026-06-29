@@ -87,7 +87,31 @@
 </table>
 
 <div class="divider"></div>
-<div class="total-row">TOTAL: S/ <?= number_format($v->total, 2) ?></div>
+
+<?php
+  $total     = floatval($v->total);
+  $esGravado = ($v->formato == 3 || $v->formato == 1); // Boleta o Factura
+  if ($esGravado) {
+    $opGravadas = round($total / 1.18, 2);
+    $igv        = round($total - $opGravadas, 2);
+  }
+?>
+
+<?php if ($esGravado): ?>
+<table style="margin:4px 0">
+  <tr>
+    <td style="font-size:11px">OP. GRAVADAS:</td>
+    <td style="text-align:right;font-size:11px">S/ <?= number_format($opGravadas, 2) ?></td>
+  </tr>
+  <tr>
+    <td style="font-size:11px">IGV (18%):</td>
+    <td style="text-align:right;font-size:11px">S/ <?= number_format($igv, 2) ?></td>
+  </tr>
+</table>
+<div class="divider"></div>
+<?php endif; ?>
+
+<div class="total-row">TOTAL: S/ <?= number_format($total, 2) ?></div>
 <div class="divider"></div>
 
 <div class="footer">
@@ -98,8 +122,15 @@
 <div class="divider"></div>
 <div class="qr-section">
   <div id="qrcode"></div>
-  <p>Escanea para verificar el comprobante</p>
+  <?php if ($v->formato == 3): ?>
+    <p>Representación digital de la<br>Boleta de Venta Electrónica</p>
+  <?php elseif ($v->formato == 1): ?>
+    <p>Representación digital de la<br>Factura de Venta Electrónica</p>
+  <?php else: ?>
+    <p>Representación digital de la<br>Nota Interna</p>
+  <?php endif; ?>
 </div>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
